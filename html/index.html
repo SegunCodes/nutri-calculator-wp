@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutritional Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .fmf-body {
+            font-family: 'Playfair Display', serif;
+            background-color: #c7b29b;
+            color: #523f30;
+        }
+        .fmf-rounded-box {
+            border-radius: 12px;
+            border: 2px solid #523f30;
+            background-color: #e4d7c5;
+            padding: 20px;
+        }
+        .fmf-icon-wrapper {
+            width: 50px;
+            height: 50px;
+            overflow: hidden;
+        }
+
+        .fmf-table th, .fmf-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        .fmf-table th {
+            background-color: #f4f4f4;
+        }
+
+        .fmf-form-group {
+            margin-bottom: 20px;
+        }
+
+        .fmf-form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .fmf-form-group input, 
+        .fmf-form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .fmf-button {
+            padding: 10px 20px;
+            background-color: #bc6e15;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .fmf-button:hover {
+            background-color: #a76012;
+        }
+
+        .fmf-form-group input {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .fmf-hidden {
+            display: none;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .fmf-table, .fmf-table th, .fmf-table td {
+                font-size: 0.9rem;
+            }
+
+            .fmf-form-group input, 
+            .fmf-form-group select {
+                font-size: 0.9rem;
+            }
+
+            .fmf-button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fmf-table {
+                font-size: 0.8rem;
+            }
+
+            .fmf-table th, .fmf-table td {
+                padding: 8px;
+            }
+
+            .fmf-button {
+                padding: 7px 10px;
+                font-size: 0.8rem;
+            }
+
+            .fmf-form-group input {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body class="fmf-body">
+    <div id="nutritionalCalculator"></div>
+    <script src="nutritional-calculator.js"></script>
+    <script>
+        const calculator = new NutritionalCalculator({
+            selector: "#nutritionalCalculator",
+            ingredients: [
+                { name: "Flour", calories: 364, protein: 10, fat: 1, carbs: 76 },
+                { name: "Sugar", calories: 387, protein: 0, fat: 0, carbs: 100 },
+                { name: "Butter", calories: 717, protein: 0.85, fat: 81, carbs: 0.1 },
+            ],
+        });
+    </script>
+</body>
+</html>
