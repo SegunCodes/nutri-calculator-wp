@@ -34,16 +34,8 @@ function fmf_display_nutrition_calculator() {
 
         $ingredient_data = [
             'name' => $ingredient_name,
-            'nutrition' => [],
+            'nutrition' => $nutrition_info,
         ];
-
-        // List of expected nutrients
-        $possible_nutrients = ['calories', 'protein', 'fat', 'carbs'];
-
-        // Fill the ingredient data with nutrient values
-        foreach ($possible_nutrients as $nutrient) {
-            $ingredient_data['nutrition'][$nutrient] = isset($nutrition_info[$nutrient]) ? $nutrition_info[$nutrient] : 0;
-        }
 
         $ingredients_data[] = $ingredient_data;
     }
@@ -190,14 +182,11 @@ function fmf_display_nutrition_calculator() {
                                 <label for="ingredient">Select Ingredient:</label>
                                 <select id="ingredient">
                                     <option value="" disabled selected>Choose an ingredient</option>
-                                    ${this.ingredients
-                                        .map(
-                                            (ingredient) =>
-                                                `<option value="${ingredient.name}" data-calories="${ingredient.calories}" data-protein="${ingredient.protein}" data-fat="${ingredient.fat}" data-carbs="${ingredient.carbs}">
-                                                ${ingredient.name}
-                                            </option>`
-                                        )
-                                        .join("")}
+                                    ${this.ingredients.map(ingredient => `
+                                        <option value="${ingredient.name}" data-nutrition='${JSON.stringify(ingredient.nutrition)}'>
+                                            ${ingredient.name}
+                                        </option>
+                                    `).join('')}
                                 </select>
                             </div>
                             <div class="fmf-form-group">
@@ -299,33 +288,27 @@ function fmf_display_nutrition_calculator() {
             
                 calculateNutritionButton.addEventListener("click", () => {
                     const rows = recipeTable.querySelectorAll("tr");
-                    let totalCalories = 0;
-                    let totalProtein = 0;
-                    let totalFat = 0;
-                    let totalCarbs = 0;
-            
+                    const totalNutrition = {};
+
                     rows.forEach((row) => {
                         const ingredientName = row.querySelector("td:first-child").textContent;
-                        const ingredientData = this.ingredients.find((ing) => ing.name === ingredientName);
-                        const grams = row.querySelector("td:nth-child(2)").textContent.replace("g", "");
-            
-                        totalCalories += (ingredientData.calories * grams) / 100;
-                        totalProtein += (ingredientData.protein * grams) / 100;
-                        totalFat += (ingredientData.fat * grams) / 100;
-                        totalCarbs += (ingredientData.carbs * grams) / 100;
+                        const ingredientData = this.ingredients.find(ing => ing.name === ingredientName);
+                        const grams = parseFloat(row.querySelector("td:nth-child(2)").textContent.replace("g", ""));
+
+                        for (const [nutrient, value] of Object.entries(ingredientData.nutrition)) {
+                            totalNutrition[nutrient] = (totalNutrition[nutrient] || 0) + (value * grams / 100);
+                        }
                     });
-            
+
+                    nutritionTable.innerHTML = Object.entries(totalNutrition).map(([nutrient, amount]) => `
+                        <tr>
+                            <td>${nutrient}</td>
+                            <td>${amount.toFixed(2)}</td>
+                        </tr>
+                    `).join('');
+
                     nutritionTitle.textContent = "Total Nutritional Information";
-                    totalServings.textContent = `Total Servings: 1`;
-            
-                    nutritionTable.innerHTML = `
-                        <tr><td>Calories</td><td>${totalCalories}</td></tr>
-                        <tr><td>Protein</td><td>${totalProtein}</td></tr>
-                        <tr><td>Fat</td><td>${totalFat}</td></tr>
-                        <tr><td>Carbs</td><td>${totalCarbs}</td></tr>
-                    `;
-            
-                    toggleVisibility(nutritionTable, true);
+                    toggleVisibility(nutritionSection, true);
                 });
             }
         }
