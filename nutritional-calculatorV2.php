@@ -264,25 +264,19 @@ function fmf_display_nutrition_calculator() {
                 addIngredientButton.addEventListener("click", () => {
                     const selectedOption = ingredientSelect.options[ingredientSelect.selectedIndex];
                     const ingredient = selectedOption.value;
-                    const calories = selectedOption.dataset.calories;
-                    const protein = selectedOption.dataset.protein;
-                    const fat = selectedOption.dataset.fat;
-                    const carbs = selectedOption.dataset.carbs;
+                    const nutrition = JSON.parse(selectedOption.dataset.nutrition || '{}');
                     const grams = gramsInput.value;
-            
+
                     if (!ingredient || !grams) return;
-            
+
                     const row = document.createElement("tr");
                     row.innerHTML = `
                         <td>${ingredient}</td>
                         <td>${grams}g</td>
-                        <td>
-                            <button class="deleteBtn">X</button>
-                        </td>
                     `;
                     recipeTable.appendChild(row);
                     gramsInput.value = "";
-            
+
                     toggleVisibility(recipeSection, true);
                 });
             
