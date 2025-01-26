@@ -7,7 +7,7 @@ function fmf_create_ingredients_table() {
     $sql = "CREATE TABLE $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         ingredient_name varchar(255) NOT NULL,
-        nutrition_info LONGTEXT NOT NULL
+        nutrition_info LONGTEXT NOT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
 
